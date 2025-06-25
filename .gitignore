@@ -1,0 +1,8 @@
+# gitignore all wav files anywhere in the project
+*.wav
+
+# ignore all npy files in the project
+*.npy
+
+# ignore all pycache in the project
+__pycache__/
