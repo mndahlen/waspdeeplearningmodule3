@@ -11,7 +11,8 @@ from speechbrain.inference.TTS import Tacotron2
 from speechbrain.inference.vocoders import HIFIGAN
 
 # set noise schedule to 10 steps for this
-params.noise_schedule=np.linspace(1e-6, 0.01, 10).tolist()
+N=10
+params.noise_schedule=np.linspace(1e-6, 0.01, N).tolist()
 
 def get_energy_score(audio, spectrogram):
     # torch device
@@ -86,6 +87,7 @@ if __name__ == '__main__':
     hifi_gan = HIFIGAN.from_hparams(source="speechbrain/tts-hifigan-ljspeech")
     spectrogram_KID, mel_length, alignment = tacotron2.encode_text("mary had a little lamb but it was not white as snow")
     audio_KID = hifi_gan.decode_batch(spectrogram_KID)
+    audio_KID = torch.clamp(audio_KID[0], -1.0, 1.0)
     # limit audio length to same as ID
     audio_KID = audio_KID[:audio_ID.shape[0]]
     # limit mel spectrogram length to same as ID
@@ -98,6 +100,7 @@ if __name__ == '__main__':
     # Kind of in disribution generated w speechbrain 2 (KID2) 
     spectrogram_KID2, mel_length, alignment = tacotron2.encode_text("WASP deep learning is a game changer and will revolutionize the world")
     audio_KID2 = hifi_gan.decode_batch(spectrogram_KID2)
+    audio_KID2 = torch.clamp(audio_KID2[0], -1.0, 1.0)
     # limit audio length to same as ID
     audio_KID2 = audio_KID2[:audio_ID.shape[0]]
     # limit mel spectrogram length to same as ID

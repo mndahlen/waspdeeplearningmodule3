@@ -10,7 +10,7 @@ import torchaudio
 from speechbrain.inference.TTS import Tacotron2
 from speechbrain.inference.vocoders import HIFIGAN
 
-text = "asdf asdf asdf"
+text = "mary had a little lamb"
 
 #"Sometimes rugs were urgently required and not forthcoming" LJ002-0332
 
