@@ -1,13 +1,11 @@
 from preprocess import preprocess_dataset
 from dataset import from_path 
 from params import params
-from model import WaveGrad, WaveGrad_light
+from model import WaveGrad_light
 import numpy as np
 import torch
 from glob import glob
-import matplotlib.pyplot as plt
 import os
-from tqdm import tqdm
 import torch.nn as nn
 
 def _nested_map(struct, map_fn):
@@ -52,7 +50,8 @@ if __name__ == '__main__':
     filenames += glob('LJSpeech-1.1/*.wav', recursive=True)
 
     # pre-process dataset (only need to run once)
-    preprocess_dataset(filenames)
+    if 1:
+      preprocess_dataset(filenames)
 
     # setup dataset
     dataset = from_path("LJSpeech-1.1", params)
@@ -75,7 +74,7 @@ if __name__ == '__main__':
     # train
     step = 0
     device = next(model.parameters()).device
-
+    losses = []
     while True:
         for features in dataset:
             print(step)
@@ -104,6 +103,7 @@ if __name__ == '__main__':
             torch.nn.utils.clip_grad_norm_(model.parameters(), params.max_grad_norm)
             optimizer.step()
             optimizer.zero_grad()
+            losses.append(loss.item())
 
             # Check for NaN loss
             if torch.isnan(loss).any():
@@ -112,4 +112,6 @@ if __name__ == '__main__':
                 print("step: ", step, "loss: ", loss)
             if step % 1000 == 0:
                 save_to_checkpoint(model, optimizer, step, params)
+                # save losses to npy
+                np.save(f'losses_{step}.npy', np.array(losses))
             step += 1

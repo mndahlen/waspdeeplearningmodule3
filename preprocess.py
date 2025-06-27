@@ -23,15 +23,9 @@ import torch
 import torchaudio as T
 import torchaudio.transforms as TT
 
-from argparse import ArgumentParser
-from concurrent.futures import ProcessPoolExecutor
-from glob import glob
 from tqdm import tqdm
 
 from params import params
-
-# Martin imports
-import matplotlib.pyplot as plt
 
 
 def transform(filename):

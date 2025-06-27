@@ -46,5 +46,5 @@ params = AttrDict(
     crop_mel_frames=24,
 
     # Model params
-    noise_schedule=np.linspace(1e-6, 0.01, 1).tolist(),
+    noise_schedule=np.linspace(1e-6, 0.01, 1000).tolist(),
 )
